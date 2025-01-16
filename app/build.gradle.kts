@@ -5,16 +5,17 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     /** serialization --> */
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.practice.ktorPractice"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.practice.ktorPractice"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         archivesName = "Ktor"
@@ -30,7 +31,7 @@ android {
             )
         }
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
     compileOptions {
@@ -40,6 +41,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    ksp {
+        arg("dagger.fastInit", "enabled") // Optional: Enable fast initialization for Hilt
+        arg("dagger.experimentalDaggerErrorMessages", "enabled") // Optional: Experimental error messages
+    }
 }
 
 dependencies {
@@ -48,6 +53,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     /** ktor --> */
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.json)
@@ -55,7 +61,12 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.client.logging)
+    /** viewModel scope*/
     testImplementation(libs.junit)
+    /**hilt*/
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

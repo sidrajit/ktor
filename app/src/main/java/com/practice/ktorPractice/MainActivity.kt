@@ -1,22 +1,22 @@
 package com.practice.ktorPractice
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.practice.ktorPractice.databinding.ActivityMainBinding
-import com.practice.network.Network
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
+import com.practice.network.collectResponseState
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val ktorClient = Network()
+    private val viewModel by lazy { ViewModelProvider(this)[MainActivityVM::class.java] }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,19 +30,24 @@ class MainActivity : AppCompatActivity() {
         getFacts()
     }
 
-    private fun listenObserver() {
-        lifecycleScope.launch {
-            ktorClient.response.collectLatest { data ->
-                Log.d("", "listenObserver: $data")
-                binding.tvId.text = data?._id.orEmpty()
-                binding.tvUser.text = data?.user.orEmpty()
+    private fun listenObserver() = lifecycleScope.launch {
+        viewModel.getFactsResponse.collectResponseState(
+            isLoading = {
+                binding.progress.isVisible = true
+            },
+            isSuccess = {
+                binding.progress.isVisible = false
+                binding.tvId.text = this?.userId.toString()
+                binding.tvUser.text = this?.title.orEmpty()
+            },
+            isError = {
+                binding.progress.isVisible = false
+                Snackbar.make(binding.root, this, Snackbar.LENGTH_LONG).show()
             }
-        }
+        )
     }
 
     private fun getFacts() {
-        CoroutineScope(Dispatchers.IO).launch {
-            ktorClient.getFacts()
-        }
+        viewModel.getFacts()
     }
 }
