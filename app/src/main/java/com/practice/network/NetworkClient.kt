@@ -1,9 +1,10 @@
 package com.practice.network
 
 import android.util.Log
+import com.practice.network.NetworkInterceptor.interceptor
 import com.practice.network.NetworkUrls.BASE_URL
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -24,7 +25,12 @@ import kotlinx.serialization.json.Json
 
 object NetworkClient {
     private val ktorClient = HttpClient {
-        defaultRequest { url(BASE_URL) }
+        // default details
+        defaultRequest {
+            url(BASE_URL)
+            header(HttpHeaders.ContentType, ContentType.Application.Json)
+        }
+        // add logs for details
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
@@ -33,15 +39,16 @@ object NetworkClient {
             }
             level = LogLevel.ALL
         }
-        install(ResponseObserver) {
-            onResponse {
-                Log.w("httpsResponse", "${it.request.url} ${it.requestTime.seconds}  ${it.status}")
-            }
+        // set timers
+        install(HttpTimeout) {
+            connectTimeoutMillis = 30_0000
+            socketTimeoutMillis = 10_0000
+            requestTimeoutMillis = 10_0000
         }
-        install(DefaultRequest) {
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-        }
+        // add interceptor
+        install(interceptor)
 
+        // add serialization
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

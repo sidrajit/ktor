@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     /** ktor --> */
+    implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.json)
     implementation(libs.ktor.content.negotiation)
@@ -63,9 +64,9 @@ dependencies {
     implementation(libs.ktor.client.logging)
     /** viewModel scope*/
     testImplementation(libs.junit)
-    /**hilt*/
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    /**koin*/
+    implementation(libs.koin.android)
+
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
