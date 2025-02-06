@@ -1,4 +1,4 @@
-package com.practice.ktorPractice
+package com.practice.ui.mainActivity
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -6,16 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import com.practice.ktorPractice.R
 import com.practice.ktorPractice.databinding.ActivityMainBinding
 import com.practice.network.collectResponseState
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val viewModel by lazy { ViewModelProvider(this)[MainActivityVM::class.java] }
+    private val vm: MainActivityVM by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listenObserver() = lifecycleScope.launch {
-        viewModel.getFactsResponse.collectResponseState(
+        vm.getFactsResponse.collectResponseState(
             isLoading = {
                 binding.progress.isVisible = true
             },
@@ -48,6 +49,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getFacts() {
-        viewModel.getFacts()
+        vm.getFacts()
     }
 }

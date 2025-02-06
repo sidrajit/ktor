@@ -1,4 +1,4 @@
-package com.practice.ktorPractice
+package com.practice.ui
 
 import org.junit.Test
 

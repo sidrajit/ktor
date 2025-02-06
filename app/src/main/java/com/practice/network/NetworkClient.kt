@@ -23,7 +23,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-object NetworkClient {
+class NetworkClient {
     private val ktorClient = HttpClient {
         // default details
         defaultRequest {
