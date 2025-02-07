@@ -25,12 +25,10 @@ import kotlinx.serialization.json.Json
 
 class NetworkClient {
     private val ktorClient = HttpClient {
-        // default details
         defaultRequest {
             url(BASE_URL)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
         }
-        // add logs for details
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
@@ -39,16 +37,12 @@ class NetworkClient {
             }
             level = LogLevel.ALL
         }
-        // set timers
         install(HttpTimeout) {
             connectTimeoutMillis = 30_0000
             socketTimeoutMillis = 10_0000
             requestTimeoutMillis = 10_0000
         }
-        // add interceptor
         install(interceptor)
-
-        // add serialization
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true
