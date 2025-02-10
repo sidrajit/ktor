@@ -10,10 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.practice.ktorPractice.R
 import com.practice.ktorPractice.databinding.ActivityMainBinding
-import com.practice.network.NetworkClient
 import com.practice.network.collectResponseState
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 binding.progress.isVisible = false
                 binding.tvId.text = this?.userId.toString()
                 binding.tvUser.text = this?.title.orEmpty()
+                vm.saveData(this)
             },
             isError = {
                 binding.progress.isVisible = false

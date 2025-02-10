@@ -4,10 +4,8 @@ import com.practice.model.facts.FactsModel
 import com.practice.network.NetworkUrls.FACT
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.setBody
-import org.koin.java.KoinJavaComponent.inject
 
 class NetworkRequestImpl(private val networkClient: NetworkClient) : NetworkRequest {
-
     // repository
     override suspend fun getFacts() = networkClient.get(FACT)
     override suspend fun postFacts(factsModel: FactsModel) =

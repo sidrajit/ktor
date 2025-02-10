@@ -1,6 +1,7 @@
 package com.practice.controller
 
 import android.app.Application
+import com.practice.koin.dataStoreModule
 import com.practice.koin.networkModule
 import com.practice.koin.useCaseModule
 import com.practice.koin.viewModelModule
@@ -16,6 +17,7 @@ class AppController : Application() {
             modules(networkModule)
             modules(useCaseModule)
             modules(viewModelModule)
+            modules(dataStoreModule)
         }
     }
 }

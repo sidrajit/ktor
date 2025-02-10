@@ -66,6 +66,8 @@ dependencies {
     testImplementation(libs.junit)
     /**koin*/
     implementation(libs.koin.android)
+    /** dataStore */
+    implementation(libs.datastore)
 
 
     androidTestImplementation(libs.androidx.junit)
